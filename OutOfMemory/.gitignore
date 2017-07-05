@@ -1,0 +1,27 @@
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
+
+# Custom ignores on top of ootb android studio ignore rules
+
+# Built application files
+*.apk
+*.ap_
+
+# Files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# Log files
+*.log
+
+# Temporary files
+*~
+*.swp
+
