@@ -12,13 +12,16 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
+/**
+ * Created by james on 11/07/17.
+ */
 @RunWith(AndroidJUnit4.class)
-public class MainActivityTest {
+public class ThirdActivityTest {
 
-    private static String TAG = MainActivity.class.getSimpleName();
+    private static String TAG = SecondActivity.class.getSimpleName();
 
     @Rule
-    public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule(MainActivity.class, true);
+    public ActivityTestRule<ThirdActivity> secondActivityTestRule = new ActivityTestRule(ThirdActivity.class, true);
 
 //    @After
 //    public void tearDown() {
@@ -26,16 +29,6 @@ public class MainActivityTest {
 //        ActivityFinisher.finishOpenActivities();
 //    }
 
-
-    private void doTest() {
-        onView(withText("Hello World!")).check(matches(isDisplayed()));
-        try {
-            Thread.currentThread().sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-    
     @Test
     public void testCase1() {
         doTest();
@@ -44,6 +37,15 @@ public class MainActivityTest {
     @Test
     public void testCase2() {
         doTest();
+    }
+
+    private void doTest() {
+        onView(withText("THIRD ACTIVITY!")).check(matches(isDisplayed()));
+        try {
+            Thread.currentThread().sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
