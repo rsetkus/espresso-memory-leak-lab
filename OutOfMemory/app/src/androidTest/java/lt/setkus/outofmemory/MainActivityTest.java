@@ -1,11 +1,25 @@
 package lt.setkus.outofmemory;
 
+import android.app.Activity;
+import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.test.runner.lifecycle.ActivityLifecycleMonitor;
+import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
+import android.support.test.runner.lifecycle.Stage;
+import android.util.Log;
 
+import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -15,16 +29,29 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
 
+    private ActivityLifecycleMonitor activityLifecycleMonitor = ActivityLifecycleMonitorRegistry.getInstance();
+    private Context context = InstrumentationRegistry.getTargetContext();
+
     private static String TAG = MainActivity.class.getSimpleName();
 
     @Rule
     public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule(MainActivity.class, true);
 
-//    @After
-//    public void tearDown() {
-//        Log.d(TAG, "tearDown");
-//        ActivityFinisher.finishOpenActivities();
-//    }
+    @After
+    public void tearDown() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                final List<Activity> activities = new ArrayList();
+
+                for (final Stage stage : EnumSet.range(Stage.CREATED, Stage.STOPPED)) {
+                    activities.addAll(activityLifecycleMonitor.getActivitiesInStage(stage));
+                }
+
+                Log.d(TAG, String.format("%d of %d is active", activities.size(), TestUtil.getNumberOfActivitiesOnMemory(context)));
+            }
+        });
+    }
 
 
     private void doTest() {
