@@ -1,21 +1,40 @@
 package lt.setkus.outofmemory;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import javax.inject.Inject;
+
+import lt.setkus.outofmemory.coffee.CoffeeMaker;
+import lt.setkus.outofmemory.di.ActivityComponent;
+
+public class MainActivity extends BaseActivity {
+
+    static String TAG = MainActivity.class.getSimpleName();
+
+    private TextView coffeeResult;
 
     static int createCounter;
     int myNumber;
 
-    static String TAG = MainActivity.class.getSimpleName();
+    @Inject
+    CoffeeMaker coffeeMaker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        coffeeResult = (TextView) findViewById(R.id.coffee_result);
+        coffeeResult.setText(String.format("%d liters brewed", coffeeMaker.brew()));
+
         myNumber = createCounter++;
+    }
+
+    @Override
+    protected void injectComponent(ActivityComponent component) {
+        component.inject(this);
     }
 
     @Override

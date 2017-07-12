@@ -21,10 +21,16 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
+import lt.setkus.outofmemory.coffee.ElectricalHeater;
+import lt.setkus.outofmemory.coffee.Heater;
+import lt.setkus.outofmemory.di.ApplicationModule;
+import lt.setkus.outofmemory.espresso.BaseActivityTestRule;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.mockito.Mockito.mock;
 
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
@@ -34,8 +40,21 @@ public class MainActivityTest {
 
     private static String TAG = MainActivity.class.getSimpleName();
 
+    private ElectricalHeater electricalHeater = mock(ElectricalHeater.class);
+
     @Rule
-    public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule(MainActivity.class, true);
+    public ActivityTestRule<MainActivity> mainActivityTestRule = new BaseActivityTestRule(MainActivity.class, true) {
+        @Override
+        protected ApplicationModule getApplicationModule() {
+            OutOfMemoryApplication application = (OutOfMemoryApplication) InstrumentationRegistry.getTargetContext().getApplicationContext();
+            return new ApplicationModule(application) {
+                @Override
+                public Heater provideHeater() {
+                    return electricalHeater;
+                }
+            };
+        }
+    };
 
     @After
     public void tearDown() {

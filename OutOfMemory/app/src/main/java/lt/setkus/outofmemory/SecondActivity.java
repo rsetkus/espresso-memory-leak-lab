@@ -1,13 +1,11 @@
 package lt.setkus.outofmemory;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-/**
- * Created by james on 11/07/17.
- */
-public class SecondActivity extends AppCompatActivity {
+import lt.setkus.outofmemory.di.ActivityComponent;
+
+public class SecondActivity extends BaseActivity {
 
     static int secondActivityCounter;
     int myNumber;
@@ -19,6 +17,11 @@ public class SecondActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
         myNumber = secondActivityCounter++;
+    }
+
+    @Override
+    protected void injectComponent(ActivityComponent component) {
+        component.inject(this);
     }
 
     @Override
